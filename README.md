@@ -63,85 +63,46 @@ NLTK resources are downloaded automatically by `src/data_preprocessing.py` on fi
 
 ## Run the Project
 
-### Full pipeline
+The repository includes a small seed `data/raw/raw_tweets.csv` so the pipeline can be verified offline. Running `python src/main.py` will try live collection first, then continue with the existing raw CSV if `snscrape` cannot reach Twitter/X from your environment.
 
-Run everything with one command:
-
-```bash
-python src/main.py
-```
-
-This command:
-
-1. Generates 1,000 synthetic tech tweets in `data/raw/raw_tweets.csv`
-2. Cleans and preprocesses the tweet text
-3. Applies VADER and TextBlob sentiment analysis
-4. Saves labeled data to `data/processed/labeled_tweets.csv`
-5. Generates charts in `results/figures/`
-6. Writes a summary report to `results/reports/summary.txt`
-
-### Run each step manually
-
-Generate raw tweets:
-
+### Day 1 — Collect tweets
 ```bash
 python src/fetch_tweets.py
 ```
+Fetches ~1,000 tech tweets using `snscrape` and saves them to `data/raw/raw_tweets.csv`.
 
-Clean and preprocess tweets:
-
+### Day 2 — Clean data
 ```bash
 python src/data_preprocessing.py
 ```
+Removes URLs, mentions, emojis, stopwords. Saves to `data/processed/clean_tweets.csv`.
 
-Run sentiment analysis:
-
+### Day 3 — Sentiment analysis
 ```bash
 python src/sentimental_model.py
 ```
+Applies VADER + TextBlob. Saves labeled data to `data/processed/labeled_tweets.csv`.
 
-Generate visualizations and the summary report:
-
+### Day 4 — Visualizations
 ```bash
 python src/visualization.py
 ```
+Generates 7 figure files and a text report. Saved to `results/`.
 
----
-
-## Streamlit Dashboard
-
-Start the dashboard with:
-
-```bash
-streamlit run app.py
-```
-
-The dashboard reads `data/processed/labeled_tweets.csv`. If labeled data does not exist yet, run:
-
+### Day 5 — Full pipeline (one command)
 ```bash
 python src/main.py
 ```
+Runs tweet collection, preprocessing, sentiment analysis, visualizations, and report generation.
 
-You can also run the full pipeline from the dashboard sidebar.
+To reuse an existing `data/raw/raw_tweets.csv` without scraping again:
+```bash
+python src/main.py --skip-fetch
+```
 
----
-
-## Outputs
-
-After running the full pipeline, the main output files are:
-
-```text
-data/raw/raw_tweets.csv
-data/processed/clean_tweets.csv
-data/processed/labeled_tweets.csv
-results/reports/summary.txt
-results/figures/sentiment_bar.png
-results/figures/sentiment_pie.png
-results/figures/sentiment_trend.png
-results/figures/top_words.png
-results/figures/wordcloud_positive.png
-results/figures/wordcloud_neutral.png
-results/figures/wordcloud_negative.png
+### Optional dashboard
+```bash
+streamlit run app.py
 ```
 
 ---
