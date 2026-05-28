@@ -1,0 +1,27 @@
+============================================================
+  AI Sentiment Analysis — Tech Tweets
+  Generated: 2026-05-28 16:45
+============================================================
+
+DATASET OVERVIEW
+  Total tweets analyzed : 497
+  Positive              : 249 (50.1%)
+  Neutral               : 98 (19.7%)
+  Negative              : 150 (30.2%)
+  Avg VADER compound    : 0.1231
+
+KEY FINDINGS
+  - The dominant sentiment is 'positive'.
+  - Overall tone toward AI/tech is positive.
+
+OUTPUT FILES
+  results/figures/sentiment_bar.png
+  results/figures/sentiment_pie.png
+  results/figures/wordcloud_positive.png
+  results/figures/wordcloud_neutral.png
+  results/figures/wordcloud_negative.png
+  results/figures/sentiment_trend.png
+  results/figures/top_words.png
+  data/processed/labeled_tweets.csv
+
+============================================================

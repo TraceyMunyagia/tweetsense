@@ -1,0 +1,23 @@
+# AI Sentiment Analysis — Tech Tweets
+# Install: pip install -r requirements.txt
+
+# Data handling
+pandas>=2.0
+numpy>=1.24
+
+# NLP / Text Processing
+nltk>=3.8
+textblob>=0.17
+vaderSentiment>=3.3.2
+
+# Visualization
+matplotlib>=3.7
+seaborn>=0.12
+wordcloud>=1.9
+streamlit>=1.30
+
+# Tweet scraping (no API key required)
+snscrape>=0.7
+
+# Optional: ML model
+scikit-learn>=1.3
