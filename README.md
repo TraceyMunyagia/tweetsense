@@ -52,41 +52,6 @@ python -c "import nltk; nltk.download('stopwords'); nltk.download('punkt')"
 
 The repository includes a small seed `data/raw/raw_tweets.csv` so the pipeline can be verified offline. Running `python src/main.py` will try live collection first, then continue with the existing raw CSV if `snscrape` cannot reach Twitter/X from your environment.
 
-### Day 1 — Collect tweets
-```bash
-python src/fetch_tweets.py
-```
-Fetches ~1,000 tech tweets using `snscrape` and saves them to `data/raw/raw_tweets.csv`.
-
-### Day 2 — Clean data
-```bash
-python src/data_preprocessing.py
-```
-Removes URLs, mentions, emojis, stopwords. Saves to `data/processed/clean_tweets.csv`.
-
-### Day 3 — Sentiment analysis
-```bash
-python src/sentimental_model.py
-```
-Applies VADER + TextBlob. Saves labeled data to `data/processed/labeled_tweets.csv`.
-
-### Day 4 — Visualizations
-```bash
-python src/visualization.py
-```
-Generates 7 figure files and a text report. Saved to `results/`.
-
-### Day 5 — Full pipeline (one command)
-```bash
-python src/main.py
-```
-Runs tweet collection, preprocessing, sentiment analysis, visualizations, and report generation.
-
-To reuse an existing `data/raw/raw_tweets.csv` without scraping again:
-```bash
-python src/main.py --skip-fetch
-```
-
 ### Optional dashboard
 ```bash
 streamlit run app.py
