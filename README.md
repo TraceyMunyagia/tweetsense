@@ -1,138 +1,184 @@
-# 🧠 AI-Powered Sentiment Analysis on Tech Tweets
+# AI-Powered Sentiment Analysis on Tech Tweets
 
-Classify tech-related tweets as **positive**, **negative**, or **neutral** using VADER and TextBlob — no Twitter API key required.
+This project generates a synthetic tech-tweet dataset, cleans the text, classifies sentiment with VADER and TextBlob, creates visual reports, and optionally displays the results in a Streamlit dashboard.
+
+The current version runs fully offline. No Twitter/X API key or live scraping is required.
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
-```
-AI Sentimental Analysis in Tech Tweets/
+```text
+AI_Sentiment_Analysis/
+├── app.py                         # Streamlit dashboard
 ├── data/
-│   ├── raw/               ← raw tweets collected by fetch_tweets.py
-│   └── processed/         ← cleaned & labeled CSVs
-├── notebooks/             ← optional Jupyter notebooks for exploration
+│   ├── raw/
+│   │   └── raw_tweets.csv         # Generated synthetic tweets
+│   └── processed/
+│       ├── clean_tweets.csv       # Cleaned/preprocessed tweets
+│       └── labeled_tweets.csv     # Tweets with sentiment labels
+├── notebooks/
+│   └── exploratory_analysis.ipynb
 ├── results/
-│   ├── figures/           ← all charts and word clouds
-│   └── reports/           ← summary.txt report
+│   ├── figures/                   # Charts and word clouds
+│   └── reports/
+│       └── summary.txt            # Text summary report
 ├── src/
-│   ├── fetch_tweets.py    ← Day 1: scrape tweets with snscrape
-│   ├── data_preprocessing.py  ← Day 2: clean & preprocess text
-│   ├── sentimental_model.py   ← Day 3: VADER + TextBlob sentiment
-│   ├── visualization.py   ← Day 4: charts, word clouds, report
-│   ├── utils.py           ← shared helpers
-│   └── main.py            ← Day 5: end-to-end pipeline runner
+│   ├── fetch_tweets.py            # Generates synthetic tech tweets
+│   ├── data_preprocessing.py      # Cleans and tokenizes tweet text
+│   ├── sentimental_model.py       # VADER + TextBlob sentiment analysis
+│   ├── visualization.py           # Figures and report generation
+│   ├── utils.py                   # Shared helpers
+│   └── main.py                    # End-to-end pipeline runner
 ├── requirements.txt
 └── README.md
 ```
 
 ---
 
-## ⚙️ Setup
+## Setup
 
-### 1. Create & activate a virtual environment
+### 1. Create and activate a virtual environment
+
 ```bash
 python3 -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
+source .venv/bin/activate
+```
+
+On Windows:
+
+```bash
+.venv\Scripts\activate
 ```
 
 ### 2. Install dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Download NLTK data (first run only)
-```python
-python -c "import nltk; nltk.download('stopwords'); nltk.download('punkt')"
+NLTK resources are downloaded automatically by `src/data_preprocessing.py` on first run if they are missing.
+
+---
+
+## Run the Project
+
+### Full pipeline
+
+Run everything with one command:
+
+```bash
+python src/main.py
+```
+
+This command:
+
+1. Generates 1,000 synthetic tech tweets in `data/raw/raw_tweets.csv`
+2. Cleans and preprocesses the tweet text
+3. Applies VADER and TextBlob sentiment analysis
+4. Saves labeled data to `data/processed/labeled_tweets.csv`
+5. Generates charts in `results/figures/`
+6. Writes a summary report to `results/reports/summary.txt`
+
+### Run each step manually
+
+Generate raw tweets:
+
+```bash
+python src/fetch_tweets.py
+```
+
+Clean and preprocess tweets:
+
+```bash
+python src/data_preprocessing.py
+```
+
+Run sentiment analysis:
+
+```bash
+python src/sentimental_model.py
+```
+
+Generate visualizations and the summary report:
+
+```bash
+python src/visualization.py
 ```
 
 ---
 
-## 🚀 Running the Project
+## Streamlit Dashboard
 
-The repository includes a small seed `data/raw/raw_tweets.csv` so the pipeline can be verified offline. Running `python src/main.py` will try live collection first, then continue with the existing raw CSV if `snscrape` cannot reach Twitter/X from your environment.
+Start the dashboard with:
 
-### Day 1 — Collect tweets
-```bash
-python src/fetch_tweets.py
-```
-Fetches ~1,000 tech tweets using `snscrape` and saves them to `data/raw/raw_tweets.csv`.
-
-### Day 2 — Clean data
-```bash
-python src/data_preprocessing.py
-```
-Removes URLs, mentions, emojis, stopwords. Saves to `data/processed/clean_tweets.csv`.
-
-### Day 3 — Sentiment analysis
-```bash
-python src/sentimental_model.py
-```
-Applies VADER + TextBlob. Saves labeled data to `data/processed/labeled_tweets.csv`.
-
-### Day 4 — Visualizations
-```bash
-python src/visualization.py
-```
-Generates 7 figure files and a text report. Saved to `results/`.
-
-### Day 5 — Full pipeline (one command)
-```bash
-python src/main.py
-```
-Runs tweet collection, preprocessing, sentiment analysis, visualizations, and report generation.
-
-To reuse an existing `data/raw/raw_tweets.csv` without scraping again:
-```bash
-python src/main.py --skip-fetch
-```
-
-### Optional dashboard
 ```bash
 streamlit run app.py
 ```
 
----
+The dashboard reads `data/processed/labeled_tweets.csv`. If labeled data does not exist yet, run:
 
-## 📊 Sample Results
+```bash
+python src/main.py
+```
 
-| Sentiment | Count | % |
-|-----------|-------|---|
-| Positive  | ~420  | ~44% |
-| Neutral   | ~330  | ~34% |
-| Negative  | ~210  | ~22% |
-
-**Output figures:**
-- `sentiment_bar.png` — distribution bar chart
-- `sentiment_pie.png` — sentiment share pie chart
-- `wordcloud_positive/neutral/negative.png` — word clouds per class
-- `sentiment_trend.png` — daily trend over time
-- `top_words.png` — combined top 15 words per sentiment
+You can also run the full pipeline from the dashboard sidebar.
 
 ---
 
-## 🛠 Tools & Libraries
+## Outputs
+
+After running the full pipeline, the main output files are:
+
+```text
+data/raw/raw_tweets.csv
+data/processed/clean_tweets.csv
+data/processed/labeled_tweets.csv
+results/reports/summary.txt
+results/figures/sentiment_bar.png
+results/figures/sentiment_pie.png
+results/figures/sentiment_trend.png
+results/figures/top_words.png
+results/figures/wordcloud_positive.png
+results/figures/wordcloud_neutral.png
+results/figures/wordcloud_negative.png
+```
+
+---
+
+## Methods
+
+| Stage | Description |
+| --- | --- |
+| Data generation | Creates 1,000 synthetic tech tweets with positive, neutral, and negative examples |
+| Cleaning | Removes URLs, mentions, emojis, punctuation, stopwords, duplicate text, and empty rows |
+| Sentiment analysis | Uses VADER compound scores and TextBlob polarity/subjectivity |
+| Final label | Uses VADER/TextBlob agreement; falls back to VADER when they disagree |
+| Reporting | Produces charts, word clouds, time trends, top words, and a text summary |
+
+---
+
+## Tools and Libraries
 
 | Purpose | Library |
-|---------|---------|
+| --- | --- |
 | Data handling | `pandas`, `numpy` |
 | Text processing | `nltk`, `re` |
 | Sentiment analysis | `vaderSentiment`, `textblob` |
-| Tweet collection | `snscrape` |
 | Visualization | `matplotlib`, `seaborn`, `wordcloud` |
+| Dashboard | `streamlit` |
 | Optional ML | `scikit-learn` |
 
 ---
 
-## 💡 Why snscrape?
+## Notes
 
-- ✅ No API key or approval required
-- ✅ Works immediately
-- ✅ Great for learning projects (500–1,000 tweets)
-- ✅ Simple CLI interface
+- `src/main.py` always regenerates `data/raw/raw_tweets.csv` before processing.
+- The generated tweet dates start from January 2024 and are used for the sentiment trend chart.
+- `snscrape` is still listed in `requirements.txt`, but the current `fetch_tweets.py` implementation does not use live scraping.
 
 ---
 
-## 📝 License
+## License
 
-For educational / portfolio use only.
+For educational and portfolio use.
